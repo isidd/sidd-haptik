@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import { Container } from "reactstrap";
+import { withRouter } from "react-router-dom";
+import { routes } from "./config/routesConfig";
+import RouteWithSubRoutes from "./helper/subRouteHandler";
+import { connect } from "react-redux";
 
-function App() {
+function Haptik(props) {
+
+  useEffect(()=>{
+    // redirect to the list componenet whenever refreshed
+      props.history.push('/list')
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container fluid style={{ overflowX: "hidden" }}>
+      {/* Map through each route and will only serve the page based on its configuration */}
+      {routes.map((route, i) => {
+        return <RouteWithSubRoutes key={i} {...route} />;
+      })}
+
+      <ToastContainer />
+    </Container>
   );
 }
 
+
+
+const _App = connect((state) => ({
+  state: state,
+}))(Haptik);
+
+const App = withRouter(_App);
+
 export default App;
+
+
+
